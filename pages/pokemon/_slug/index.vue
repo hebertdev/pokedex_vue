@@ -8,6 +8,8 @@
 					<div class="detalle">
 					</div>
 				</div>
+			
+				<audio :src="require('@/static/img/pokedex.wav')" autoplay="" loop=""></audio>
 			</div>
 
 			<div id="container-all-pokemon-detail"  v-if="loaded==true">
@@ -20,7 +22,7 @@
 								<span class="icon-next-previous"  v-on:click="loaded=false"> < </span>	
 							</nuxt-link>
 							
-							<h1 class="title-name-pokemon">{{pokemon.name}}</h1>
+							<h1 class="title-name-pokemon">{{pokemon.name}} #{{pokemon.id}} </h1>
 							
 							<nuxt-link  :to="`/pokemon/${nextPoke.id}`" >
 								<span class="icon-next-previous" v-on:click="loaded=false"> > </span>	
@@ -34,10 +36,17 @@
 								<div class="container-type-pokemon" v-for="type in types"   style="display: flex;width: 140px;" >
 									<p v-for="typex in typesall" v-if="typex.name===type.type.name"  :style="typex.estilos" >
 										<b>{{type.type.name}}</b>
-
+										
 									</p>
 								</div>
 							</div>
+
+							<div class="container-txt-description-pokemon">
+								<p>{{descriptionPokemon}}</p>
+								
+							</div>
+							
+							
 
 						</div>
 
@@ -78,6 +87,8 @@
 				loaded:false,
 				rutaImg:'',
 				types:'',
+				descriptionPokemon:'',
+
 
 
 				estiloGradient:{
@@ -205,7 +216,7 @@
 				async getUrl(){
 					try {
 
-						console.log(this.loaded)
+						
 
 						this.ruta3 = this.$route.path
 						let paths = this.ruta3.split('/');
@@ -223,7 +234,7 @@
 
 						let nextPokemon = await this.$axios.$get(`/pokemon/${next}/`)
 						let previousPokemon = await this.$axios.$get(`/pokemon/${previous}/`)
-						console.log(previousPokemon)
+						
 						
 
 						this.nextPoke = nextPokemon
@@ -297,16 +308,35 @@
 
 									this.degradado = backgroundLayout
 									this.estiloGradient.background = backgroundColors
-
-
-
-
 								}
 
 								
 							}
 						}
 
+
+						
+						var descriptionPokemon = especies.flavor_text_entries
+						var txtdescription = []
+						for (const prop4 in descriptionPokemon){
+							
+							var espanishText = descriptionPokemon[prop4].language.name
+							if (espanishText == 'es'){
+								console.log(descriptionPokemon[prop4])
+								txtdescription.push(descriptionPokemon[prop4].flavor_text)
+
+								
+
+								this.descriptionPokemon = txtdescription[1]
+
+							}
+
+						}
+
+						//speechSynthesis.speak(new SpeechSynthesisUtterance(this.descriptionPokemon))
+
+
+          				
 
 						
 
@@ -317,11 +347,10 @@
 
 						this.loaded = true
 
-						console.log(this.loaded)
+						
 
 
-          //console.log(especies.flavor_text_entries[27].language)
-          //console.log(especies.flavor_text_entries[3].language)
+          
 
       } catch (e) {
       	console.log(e)
@@ -490,7 +519,7 @@ a{
 }
 
 .title-name-pokemon{
-	font-size: 30px;
+	font-size: 20px;
 	color: #333333;
 	color: white;
 	text-align: center;
@@ -525,4 +554,14 @@ a{
 }
 
 /* ani*/
+
+.container-txt-description-pokemon{
+	max-width: 500px;
+	width: 95%;
+	margin:auto;
+	font-size: 16px;
+	color: #333333;
+	text-align: center;
+	padding: 0 10px;
+}
 </style>

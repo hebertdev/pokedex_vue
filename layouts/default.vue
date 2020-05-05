@@ -23,7 +23,7 @@
           <div class="max-search-form">
             <div style="display: flex;">
               <input type="text" id="inputsearch" class="search-input" placeholder="search for pokemon"  v-model="pokemon" autocomplete="off" onkeyup="javascript:this.value=this.value.toLowerCase();">
-              <span style="font-size: 25px;
+              <span style="font-size: 35px;
               width: 34px;
               height: 34px;
               display: flex;color: #666;cursor: pointer;" v-on:click="opensearch=false">x</span>
@@ -160,15 +160,13 @@ html {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.01);
   padding: 5px;
   border-radius: 100%;
   transition: all 0.5s;
 }
 
-.icon-searchxd:hover{
-  background: rgba(0,0,0,0.3);
-}
+
 
 .searchFORM{
   width: 100%;
@@ -189,7 +187,7 @@ html {
 .search-input{
   display: block;
   width: 95%;
-  padding: 10px;
+  padding: 15px 10px;
   border: none;
   border-bottom: 2px solid rgba(0,0,0,0.09);
   margin: auto;
