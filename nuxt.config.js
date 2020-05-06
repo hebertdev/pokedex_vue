@@ -1,3 +1,5 @@
+const path = require('path')
+import guides from "./contents/guides/guides.js"
 
 export default {
   mode: 'universal',
@@ -65,6 +67,49 @@ export default {
           name: '[path][name].[ext]'
         }
       })
+    }
+  },
+  manifest: {
+    name: 'Pokedex By Hebertdev',
+    short_name: 'Pokedex AQP',
+    lang: 'es',
+    display: 'standalone',
+  },
+  generate: {
+    fallback: true,
+    routes: [].concat(guides.map(guide => `guides/${guide}`))
+  },
+  workbox: {
+    runtimeCaching: [
+      {
+        urlPattern: 'https://fonts.googleapis.com/.*',
+        handler: 'cacheFirst',
+        method: 'GET',
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } }
+      },
+      {
+        urlPattern: 'https://fonts.gstatic.com/.*',
+        handler: 'cacheFirst',
+        method: 'GET',
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } }
+      },
+      {
+        urlPattern: 'https://cdn.snipcart.com/.*',
+        method: 'GET',
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } }
+      },
+      {
+        urlPattern: 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js',
+        handler: 'cacheFirst',
+        method: 'GET',
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } }
+      }
+    ]
+  },
+  vue: {
+    config: {
+      productionTip: false,
+      devtools: true
     }
   }
 }

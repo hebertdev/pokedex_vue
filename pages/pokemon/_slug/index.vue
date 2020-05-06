@@ -8,46 +8,74 @@
 					<div class="detalle">
 					</div>
 				</div>
-			
+
 				<audio :src="require('@/static/img/pokedex.wav')" autoplay="" loop=""></audio>
 			</div>
 
-			<div id="container-all-pokemon-detail"  v-if="loaded==true">
-				<div class="container-detail-pokemon" :style="estiloGradient" >
-					<div style="height: 50px;">
-					</div>
-					<div class="max-container">
-						<div class="header-name-pokemon">
-							<nuxt-link  :to="`/pokemon/${previousPoke.id}`">
-								<span class="icon-next-previous"  v-on:click="loaded=false"> < </span>	
-							</nuxt-link>
-							
-							<h1 class="title-name-pokemon">{{pokemon.name}} #{{pokemon.id}} </h1>
-							
-							<nuxt-link  :to="`/pokemon/${nextPoke.id}`" >
-								<span class="icon-next-previous" v-on:click="loaded=false"> > </span>	
-							</nuxt-link>
+			<div id="container-all-pokemon-detail"  v-if="loaded==true" >
+				<div class="container-detail-pokemon" :style="estiloGradient" >	
+
+					<div class="container-pokedex-info">
+						<div style="height: 55px;"></div>
+						<div class="container-img-pokemon" style="height: 215px;position: relative;z-index: 1;">
+							<img v-bind:src="rutaImg" alt="" class="img-pokemon" style="display: block;margin:auto;">
 						</div>
-						<div class="container-info-pokemon">
-							<img v-bind:src="rutaImg" alt="" class="img-pokemon">
-
-
+						<div class="info-pokemon">
+							<div style="height: 50px;"></div>
 							<div style="display: flex;justify-content: center;align-items: center;">
-								<div class="container-type-pokemon" v-for="type in types"   style="display: flex;width: 140px;" >
-									<p v-for="typex in typesall" v-if="typex.name===type.type.name"  :style="typex.estilos" >
+								<div class="container-type-pokemon" v-for="type in types"  style="display: flex;width: 140px;"  >
+									<p class="txt-type" v-for="typex in typesall" v-if="typex.name===type.type.name"  :style="typex.estilos" style="margin-bottom: 10px;" >
 										<b>{{type.type.name}}</b>
 										
 									</p>
 								</div>
 							</div>
+							<div class="pokedex-info-poke" style="padding: 15px;box-sizing: border-box;">
+								<div class="container-txt-description-pokemon">
+									<p style="color: #333333;"><b>{{descriptionPokemon}}</b></p>
+								</div>
 
-							<div class="container-txt-description-pokemon">
-								<p>{{descriptionPokemon}}</p>
-								
+								<div style="width: 100%">
+
+									<p :style="first_color" style="padding: 3px 5px;margin-top:10px;font-size: 19px;border-radius: 5px;"><b>PROFILE   </b></p>
+									<div class="info-profile-pokemon">
+										<div style="width: 49%;margin: 5px 0;">
+											<p><b>Height:</b> <span> {{height}}m </span> </p>
+										</div>
+										<div style="width: 49%;margin: 5px 0;">
+											<p><b>Weight:</b> <span> {{weight}}kg </span> </p>
+										</div>
+										<div style="width: 49%;margin: 5px 0;">
+											<p><b>Catch Rate:</b> <span> {{capture}}% </span> </p>
+										</div>
+										
+										<div style="width: 49%;margin: 5px 0;">
+											<p><b>Egg Groups:</b> <span> <p style="display: flex;" v-for="egg in specie.egg_groups"> -{{egg.name}}   </p> </span> </p>
+										</div>
+										
+										<div style="width: 49%;margin: 5px 0;display: flex;" >
+											<p><b>Abilities:</b> <span style=""> <p style="display: flex;" v-for="ability in pokemon.abilities"> -{{ability.ability.name}}   </p> </span> </p>
+										</div>
+
+									</div>
+									
+								</div>
+								<div style="height: 30px;">
+									
+								</div>
+							</div>
+							<div class="header-name-pokemon" :style="first_color">
+								<nuxt-link  :to="`/pokemon/${previousPoke.id}`">
+									<span class="icon-next-previous"  v-on:click="loaded=false"> < </span>	
+								</nuxt-link>
+
+								<h1 class="title-name-pokemon">{{pokemon.name}} #{{pokemon.id}} </h1>
+
+								<nuxt-link  :to="`/pokemon/${nextPoke.id}`" >
+									<span class="icon-next-previous" v-on:click="loaded=false"> > </span>	
+								</nuxt-link>
 							</div>
 							
-							
-
 						</div>
 
 					</div>
@@ -66,7 +94,7 @@
 	export default {
 		head() {
 			return {
-				title: "detail"
+				title: this.pokemon.name
 			};
 		},
 
@@ -88,12 +116,20 @@
 				rutaImg:'',
 				types:'',
 				descriptionPokemon:'',
+				height:'',
+				weight:'',
+				capture:'',
+				resultSearchvoz:'',
+
 
 
 
 				estiloGradient:{
 					'background':'white',
-					
+				},
+
+				first_color:{
+					'background':'white',
 				},
 
 
@@ -208,6 +244,7 @@
 							'background':'#f6bfc4',
 						}
 					},
+
 					]
 				};
 			},
@@ -216,14 +253,17 @@
 				async getUrl(){
 					try {
 
-						
-
 						this.ruta3 = this.$route.path
 						let paths = this.ruta3.split('/');
 						let pokedetail = paths[paths.length-1];
 
+						let ahorsi = this.resultSearchvoz
 
 						let pokemon = await this.$axios.$get(`/pokemon/${pokedetail}/`);
+
+						
+						
+
 
 
 
@@ -234,16 +274,11 @@
 
 						let nextPokemon = await this.$axios.$get(`/pokemon/${next}/`)
 						let previousPokemon = await this.$axios.$get(`/pokemon/${previous}/`)
-						
-						
+
+
 
 						this.nextPoke = nextPokemon
 						this.previousPoke = previousPokemon
-						
-
-
-						
-
 
 
 						let types = pokemon.types
@@ -263,7 +298,7 @@
 						if (types.length==2){
 							let typeone = types[0].type.name
 							let typetwo = types[1].type.name
-							
+
 
 							for (const prop2 in alltypesx){
 
@@ -276,13 +311,14 @@
 									if(pokemonType==pokemonTypes){
 										console.log(backgroundColors)
 										colors.push(backgroundColors)
-										
+
 
 										var backgroundLayout = `linear-gradient(to top, ${colors[0]} , ${colors[1]} ,  ${colors[0]} )`
 										console.log(backgroundLayout)
 
 										this.degradado = backgroundLayout
 										this.estiloGradient.background = backgroundLayout
+										this.first_color.background = colors[1]
 
 									}
 
@@ -300,32 +336,36 @@
 								let backgroundColors = alltypesx[prop2].estilos.background
 
 								if(typeone==pokemonTypes){
-									console.log(backgroundColors)
+
 									colors.push(backgroundColors)
 
 									var backgroundLayout = `linear-gradient(to top, ${colors[1]} ,  ${colors[0]})`
-									console.log(backgroundLayout)
+
+									
+
 
 									this.degradado = backgroundLayout
 									this.estiloGradient.background = backgroundColors
+									this.first_color.background = backgroundColors
+
 								}
 
-								
+
 							}
 						}
 
 
-						
+
 						var descriptionPokemon = especies.flavor_text_entries
 						var txtdescription = []
 						for (const prop4 in descriptionPokemon){
-							
+
 							var espanishText = descriptionPokemon[prop4].language.name
 							if (espanishText == 'es'){
-								console.log(descriptionPokemon[prop4])
+
 								txtdescription.push(descriptionPokemon[prop4].flavor_text)
 
-								
+
 
 								this.descriptionPokemon = txtdescription[1]
 
@@ -333,235 +373,235 @@
 
 						}
 
-						//speechSynthesis.speak(new SpeechSynthesisUtterance(this.descriptionPokemon))
 
+						this.height = pokemon.height * 0.10
+						this.weight = pokemon.weight * 0.10
+						this.capture = especies.capture_rate * 0.10
 
-          				
-
+						console.log(pokemon)
 						
-
+						
 						this.types = types
 						this.pokemon = pokemon
 						this.specie = especies
 						this.rutaImg = rutaimgpokemon
 
+						var speech = new SpeechSynthesisUtterance(pokemon.name);
+
+						speech.lang = 'en-GB';
+						speechSynthesis.speak(speech)
+
+
 						this.loaded = true
 
-						
+
+					} catch (e) {
+						console.log(e)
 
 
-          
+					}
+				},
 
-      } catch (e) {
-      	console.log(e)
-
-
-      }
-  }
-
-},
-
-mounted: function(){
-	this.getUrl()
-},
-
-};
-</script>
-
-<style>
+			},
 
 
-/* animacion pokebola */
-.container-pokebolla{
-	width: 100%;
-	height: 100vh;
-	position: fixed;
-	background: white;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
+			mounted: function(){
+				this.getUrl()
+				
+			},
 
-.pokeball {
-	width: 9rem;
-	height: 9rem;
-	background-color: white;
-	border: solid .5em black;
-	border-radius: 50%;
-	margin: auto;
-	animation-name: captura;
-	animation-duration: 1s;
-	animation-iteration-count: infinite;
-	animation-play-state: running;
-	
-}
-
-.pokeball::before {
-	content: "";
-	width: 9rem;
-	height: 4.5rem;
-	background-color: red;
-	position: absolute;
-	border-radius: 4.5rem 4.5rem 0 0;
-}
-.detalle {
-	width: 9rem;
-	height: 1rem;
-	background-color: black;
-	position: relative;
-	margin-top: 4rem;
-}
-
-.detalle::before {
-	content: "";
-	width: 4rem;
-	height: 4rem;
-	background-color: white;
-	position: absolute;
-	border: solid .5rem black;
-	border-radius: 50%;	
-	margin-top: -2rem;
-	margin-left: 2rem;
-}
-
-.pokeball::after {
-	content: "";
-	width: 3rem;
-	height: 3rem;
-	background-color: #7F8C8D;
-	position: absolute;
-	border-radius: 50%;
-	margin-top: -2rem;
-	margin-left: 3rem;
-	animation-name: parpadeo;
-	animation-duration: 1s;
-	animation-iteration-count: infinite;
-	animation-play-state: running;
-}
+		};
+	</script>
 
 
-@keyframes captura {
-	0%{
-		transform: translate(0rem) rotate(0deg);
+
+
+	<style>
+
+
+	/* animacion pokebola */
+	.container-pokebolla{
+		width: 100%;
+		height: 100vh;
+		position: fixed;
+		background: white;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
-	30%{
-		transform: translate(1rem) rotate(50deg);
-	}
-	60%{
-		transform: translate(-1rem) rotate(-50deg);
-	}
-	100%{
-		transform: translate(0rem) rotate(0deg);
-	}
-}
 
-@keyframes parpadeo {
-	0%{
-		background-color: #7F8C8D;
+	.pokeball {
+		width: 9rem;
+		height: 9rem;
+		background-color: white;
+		border: solid .5em black;
+		border-radius: 50%;
+		margin: auto;
+		animation-name: captura;
+		animation-duration: 1s;
+		animation-iteration-count: infinite;
+		animation-play-state: running;
+
 	}
-	50% {
+
+	.pokeball::before {
+		content: "";
+		width: 9rem;
+		height: 4.5rem;
 		background-color: red;
+		position: absolute;
+		border-radius: 4.5rem 4.5rem 0 0;
 	}
-	100%{
+	.detalle {
+		width: 9rem;
+		height: 1rem;
+		background-color: black;
+		position: relative;
+		margin-top: 4rem;
+	}
+
+	.detalle::before {
+		content: "";
+		width: 4rem;
+		height: 4rem;
+		background-color: white;
+		position: absolute;
+		border: solid .5rem black;
+		border-radius: 50%;	
+		margin-top: -2rem;
+		margin-left: 2rem;
+	}
+
+	.pokeball::after {
+		content: "";
+		width: 3rem;
+		height: 3rem;
 		background-color: #7F8C8D;
+		position: absolute;
+		border-radius: 50%;
+		margin-top: -2rem;
+		margin-left: 3rem;
+		animation-name: parpadeo;
+		animation-duration: 1s;
+		animation-iteration-count: infinite;
+		animation-play-state: running;
 	}
+
+
+	@keyframes captura {
+		0%{
+			transform: translate(0rem) rotate(0deg);
+		}
+		30%{
+			transform: translate(1rem) rotate(50deg);
+		}
+		60%{
+			transform: translate(-1rem) rotate(-50deg);
+		}
+		100%{
+			transform: translate(0rem) rotate(0deg);
+		}
+	}
+
+	@keyframes parpadeo {
+		0%{
+			background-color: #7F8C8D;
+		}
+		50% {
+			background-color: red;
+		}
+		100%{
+			background-color: #7F8C8D;
+		}
+
+	}
+	/* fin*/
+
+	a{
+		text-decoration: none;
+	}
+	.icon-next-previous{
+		color: white;
+		font-size: 30px;
+		font-weight: 600;
+		padding: 10px;
+		cursor: pointer;
+		display: block;
+		width: 35px;
+		height: 35px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 100%;
+		color: #333333;
+	}
+	.icon-next-previous:hover{
+		background: rgba(0,0,0,0.1);
+	}
+
+	.container-detail-pokemon{
+		max-width: 100%;
+		width: 100%;
+		margin: auto;
+		height: 100vh;
+		background: rgb(104, 144, 240);
+		position: fixed;
+
+
+
+		/**background: linear-gradient(to right,  #4e73df78 ,#8360c3cc);**/ 
+	}
+	.container-pokedex-info{
+		max-width: 600px;
+		height: 100vh;
+		background: ;
+		margin: auto;
+	}
+	.info-pokemon{
+		background: white;
+		width: 100%;
+		height: 300px;
+		margin-top:-60px;
+		border-top-left-radius: 35px;
+		border-top-right-radius: 35px;
+		height: calc(100% - 210px);
+		overflow: auto;
+		position: relative;
+	}
+
+	.pokedex-info-poke{
+		width: 100%;
+		background: white;
+		height: calc(100% - 100px);
+		overflow: auto;
+	}
+	.header-name-pokemon{
+		position: fixed;
+		bottom: 0;
+		background: orange;
+		max-width: 600px;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 50px;
+		border-top: 1px solid rgba(0,0,0,0.1);
+		color: #333333;
+
+	}
+
+	.header-name-pokemon h1{
+		font-size: 21px;
+	}
+
+	.txt-type{
+		display: block;
+		width: 100%;
+		text-align: center;
+	}
+	.info-profile-pokemon div p{
+		font-size: 18px;
+	}
+
 	
-}
-/* fin*/
-
-a{
-	text-decoration: none;
-}
-.icon-next-previous{
-	color: white;
-	font-size: 30px;
-	font-weight: 600;
-	padding: 10px;
-	cursor: pointer;
-	display: block;
-	width: 35px;
-	height: 35px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-radius: 100%;
-}
-.icon-next-previous:hover{
-	background: rgba(0,0,0,0.1);
-}
-
-.container-detail-pokemon{
-	max-width: 100%;
-	width: 100%;
-	margin: auto;
-	height: 100vh;
-	background: rgb(104, 144, 240);
-	
-	
-
-	/**background: linear-gradient(to right,  #4e73df78 ,#8360c3cc);**/ 
-}
-
-.max-container{
-	max-width: 1100px;
-	width: 90%;
-	margin: auto;
-	
-}
-
-.header-name-pokemon{
-	width: 100%;
-	height: 40px;
-	background: rgba(0,0,0,0.1);
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.title-name-pokemon{
-	font-size: 20px;
-	color: #333333;
-	color: white;
-	text-align: center;
-
-}
-
-.img-pokemon{
-	margin: auto;
-	display: block;
-}
-
-.container-info-pokemon{
-	width: 100%;
-	background: white;
-}
-
-.container-type-pokemon{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-}
-.container-type-pokemon p{
-	width: 140px;
-	
-	text-align: center;
-	margin: 5px;
-	color: #00000069;
-	font-weight: 600;
-	padding: 2px;
-	letter-spacing: 1px;
-}
-
-/* ani*/
-
-.container-txt-description-pokemon{
-	max-width: 500px;
-	width: 95%;
-	margin:auto;
-	font-size: 16px;
-	color: #333333;
-	text-align: center;
-	padding: 0 10px;
-}
 </style>

@@ -1,0 +1,82 @@
+<div style="height: 50px;">
+					</div>
+					<div class="header-name-pokemon" style="z-index: 3;">
+						<nuxt-link  :to="`/pokemon/${previousPoke.id}`">
+							<span class="icon-next-previous"  v-on:click="loaded=false"> < </span>	
+						</nuxt-link>
+
+						<h1 class="title-name-pokemon">{{pokemon.name}} #{{pokemon.id}} </h1>
+
+						<nuxt-link  :to="`/pokemon/${nextPoke.id}`" >
+							<span class="icon-next-previous" v-on:click="loaded=false"> > </span>	
+						</nuxt-link>
+					</div>
+					<div class="max-container">
+						
+						<div class="container-info-pokemon">
+							<img v-bind:src="rutaImg" alt="" class="img-pokemon" style="position: absolute;
+							left: 0;
+							right: 0;
+							margin: auto;z-index: 2;">
+
+
+							<div style="max-width: 1100px;
+							background: white;
+							top: 170px;
+							position: absolute;
+							width: 100%;
+							left: 0px;
+							right: 0px;
+							margin: auto;
+							border-top-right-radius: 30px;
+							border-top-left-radius: 30px;
+							height: 100%;
+							">
+							<div style="height: 70px;"></div>
+
+							<div style="display: flex;justify-content: center;align-items: center;">
+								<div class="container-type-pokemon" v-for="type in types"   style="display: flex;width: 140px;" >
+									<p v-for="typex in typesall" v-if="typex.name===type.type.name"  :style="typex.estilos" >
+										<b>{{type.type.name}}</b>
+										
+									</p>
+								</div>
+							</div>
+
+							<div class="container-txt-description-pokemon">
+								<p>{{descriptionPokemon}}</p>
+							</div>
+
+							<div>
+								<div class="container-profile" :style="estiloGradient">
+									<p>Profile</p>
+								</div>
+								<div style="width: 96%;margin:auto">
+									<div style="width: 100%;display: flex;flex-wrap: wrap;justify-content: space-between;">
+										<div style="width: 49%;margin: 5px 0;">
+											<p><b>Height:</b> <span> {{height}}m </span> </p>
+										</div>
+										<div style="width: 49%;margin: 5px 0;">
+											<p><b>Weight:</b> <span> {{weight}}kg </span> </p>
+										</div>
+										<div style="width: 49%;margin: 5px 0;">
+											<p><b>Catch Rate:</b> <span> {{capture}}% </span> </p>
+										</div>
+										
+										<div style="width: 49%;margin: 5px 0;">
+											<p><b>Egg Groups:</b> <span> <p style="display: flex;" v-for="egg in specie.egg_groups"> -{{egg.name}}   </p> </span> </p>
+										</div>
+										
+										<div style="width: 49%;margin: 5px 0;display: flex;" >
+											<p><b>Abilities:</b> <span style=""> <p style="display: flex;" v-for="ability in pokemon.abilities"> -{{ability.ability.name}}   </p> </span> </p>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+
+				</div>
