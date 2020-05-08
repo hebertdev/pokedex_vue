@@ -11,13 +11,24 @@
             <h2 class="logotxt">PokedEX AQP</h2>
           </nuxt-link>
           
-          <div>
+          <div style="display: flex;">
+
             <label for="inputsearch"><img
               class="icon-searchxd"
               src="@/static/img/search.png"
-              v-on:click="opensearch=true"></label>
+              v-on:click="opensearch=true,pokemon='',is_recording=false"></label>
+
+              <label for="inputsearch"><img
+              class="icon-searchxd"
+              src="@/static/img/microfono.png"
+              v-on:click="speekPOKE(),opensearch=true,pokemon='Busqueda por voz',is_recording=true" ></label>
+
             </div>
+
+
+
           </div>
+
         </div>
         <div class="searchFORM" v-if="opensearch==true">
           <div class="max-search-form">
@@ -26,7 +37,12 @@
               <span style="font-size: 35px;
               width: 34px;
               height: 34px;
-              display: flex;color: #666;cursor: pointer;" v-on:click="opensearch=false">x</span>
+              display: flex;color: #666;cursor: pointer;" v-on:click="opensearch=false,is_recording=false">x</span>
+              <label v-if="is_recording==true"><img
+              style="margin:9px 0"
+              class="icon-searchxd recording-icon"
+              src="@/static/img/recording.png"
+              v-on:click="speekPOKE(),opensearch=true,pokemon='Busqueda por voz'" ></label>
             </div>
 
 
@@ -61,6 +77,8 @@
          hola:'asdasd',
          pokemon:'',
          opensearch:false,
+         is_recording:false,
+
        };
      },
 
@@ -77,9 +95,49 @@
           console.log(e)
 
         }
-      }
+      },
+
+      speekPOKE: function(){
+          let rec;
+          if (!("webkitSpeechRecognition" in window)) {
+            alert("disculpe, no puedes usar la API");
+          } else {
+            rec = new webkitSpeechRecognition();
+            rec.lang = "es-PE";
+            rec.continuous = true;
+            rec.interimResults = false;
+            
+          }
+
+          rec.onresult = (event) =>{
+            const results = event.results
+            const frase = results[results.length-1][0].transcript;
+            console.log(frase)
+
+            
+
+
+            let fraseone = frase.toLowerCase()
+
+            var newfrase = fraseone.trim()
+
+            this.pokemon = newfrase
+            
+
+          }
+
+          
+
+
+          rec.start();
+
+        }
+
+  
 
     },
+
+   
 
     computed: {
       SearchPokemon: function () {
@@ -225,6 +283,19 @@ html {
   color: #333333;
 }
 
+
+.recording-icon{
+  animation:recording infinite 0.5s;
+}
+
+@keyframes recording{
+  from{
+    transform: scale(1);
+  }
+  to{
+    transform: scale(0.9);
+  }
+}
 
 
 </style>

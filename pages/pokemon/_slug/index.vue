@@ -272,6 +272,20 @@
 						let next =  pokemon.id + 1
 						let previous =  pokemon.id - 1
 
+						if(next == 808){
+							next = 1
+						}
+
+						if(previous==0){
+							previous=807
+						}
+
+
+
+
+
+
+
 						let nextPokemon = await this.$axios.$get(`/pokemon/${next}/`)
 						let previousPokemon = await this.$axios.$get(`/pokemon/${previous}/`)
 
