@@ -112,7 +112,7 @@
 				unarutadefinia : this.$route.path,
 				pokemon:'',
 				specie:'',
-				loaded:false,
+				loaded:true,
 				rutaImg:'',
 				types:'',
 				descriptionPokemon:'',
