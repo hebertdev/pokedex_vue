@@ -17,7 +17,7 @@
     "cross-env": "^5.2.0",
     "frontmatter-markdown-loader": "^3.3.0",
     "hchs-vue-charts": "^1.2.8",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "nuxt": "^2.12.1",
     "sass-loader": "^8.0.2"
   },
