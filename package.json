@@ -18,7 +18,7 @@
     "frontmatter-markdown-loader": "^3.3.0",
     "hchs-vue-charts": "^1.2.8",
     "node-sass": "^4.13.1",
-    "nuxt": "^2.12.1",
+    "nuxt": "^2.15.8",
     "sass-loader": "^8.0.2"
   },
   "devDependencies": {
